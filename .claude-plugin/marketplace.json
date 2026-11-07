@@ -1,0 +1,14 @@
+{
+  "name": "agent-team",
+  "description": "Stack-agnostic agent team for Claude Code: an Opus team-leader orchestrating Sonnet specialists.",
+  "owner": {
+    "name": "smartinello1"
+  },
+  "plugins": [
+    {
+      "name": "agent-team",
+      "source": "./",
+      "description": "Opus team-leader orchestrating Sonnet specialist agents. Stack-agnostic."
+    }
+  ]
+}
