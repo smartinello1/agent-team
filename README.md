@@ -32,7 +32,24 @@ you ──► team-leader (Opus) ──brief──► specialist (Sonnet)
 5. **Parallel only across apps.** The leader runs tasks in parallel only when different agents own different apps or docs (e.g. backend and design). It never runs two instances of the same agent, or two agents on the same app, at once: that work goes to one agent in sequence, so there are no conflicting edits to reconcile.
 6. **Security gate.** Changes that touch auth, tenant isolation, input, data, secrets, webhooks, uploads, integrations or dependencies go to `security-engineer` before they're done. It reviews security only (no style or performance), with read-only tools, and returns `block`, `fix before done` or `pass`; findings go back to the owning engineer and the fix is re-reviewed.
 
-The leader keeps product state in `docs/product/` (vision, roadmap, backlog, decisions) and architecture decisions as ADRs in `docs/architecture/`; the designer owns `docs/design/`. If your project already keeps these elsewhere, say so in `CLAUDE.md`.
+## Project handbook
+
+The leader keeps a **handbook** so anyone can pick up the project from one page: a short entry point that links to documents with one job each, instead of one file that holds everything.
+
+```
+docs/
+  README.md              entry point: what the product is, current state, system map, where to find what
+  decisions.md           append-only dated log: decision + why + links
+  product/vision.md      problem, users, value proposition, what it is not, roadmap summary
+  product/domain.md      glossary, business rules, lifecycles
+  architecture/overview.md   how the system works today
+  architecture/NNNN-*.md     ADRs for cross-cutting, hard-to-reverse decisions
+  design/                owned by product-designer
+```
+
+Roadmap and backlog live in your issue tracker if you use one (otherwise `docs/product/roadmap.md` and `backlog.md`). Setup, deploy and agent rules stay where they are (app READMEs, deploy docs, `CLAUDE.md`); the handbook links to them. The living pages are updated in the PR that changes the behaviour; `decisions.md` is never rewritten.
+
+The `project-handbook` skill holds the templates and the setup, update and audit procedure. The leader loads it when a project has no handbook yet; you can also run it directly with `/agent-team:project-handbook`. If your project already keeps these docs elsewhere, say so in `CLAUDE.md`.
 
 ## Install
 
@@ -73,5 +90,6 @@ Project instructions always override the agents' defaults.
 .claude-plugin/plugin.json        plugin manifest
 .claude-plugin/marketplace.json   makes this repo installable as a marketplace
 settings.json                     default agent = team-leader
-agents/*.md                       the eight agents
+agents/*.md                       the seven agents
+skills/project-handbook/SKILL.md  handbook structure, templates and procedure
 ```
