@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: handbook-no-invented-vision
+tags: [handbook]
+plugins: ["../.."]
+context:
+  scaffold_script: fixture.sh

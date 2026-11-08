@@ -1,19 +1,19 @@
 # agent-team
 
-A Claude Code plugin that turns every session into a small software team: one **team-leader** (Opus 5.5) that you talk to, and seven specialists that do the work: five **executors** (Sonnet 5.5) and two **reviewers** (Opus 5.5), one for correctness and one for security.
+A Claude Code plugin that turns every session into a small software team: one **team-leader** (Opus) that you talk to, and seven specialists that do the work: five **executors** (Sonnet) and two **reviewers** (Opus), one for correctness and one for security. Models are set by alias, so the team moves to each new Opus and Sonnet release on its own.
 
 The agents are **stack-agnostic**. They define roles, workflow and rules; the stack (frameworks, commands, conventions) comes from each project's `CLAUDE.md`, manifests and docs, which they read before every task.
 
 | Agent | Model | Role |
 |---|---|---|
-| `team-leader` | `claude-opus-5-5` | Entrypoint. Learns the project, plans, writes briefs, dispatches, reviews, decides. |
-| `backend-engineer` | `claude-sonnet-5-5` | API, data model and migrations, auth, integrations, CI pipelines, backend tests. |
-| `frontend-engineer` | `claude-sonnet-5-5` | Web app and shared web components. |
-| `mobile-engineer` | `claude-sonnet-5-5` | Mobile app (React Native/Expo, Flutter, native). |
-| `product-designer` | `claude-sonnet-5-5` | Brand, design system, handoff specs. |
-| `e2e-tester` | `claude-sonnet-5-5` | Browser end-to-end tests against the real backend; can also explore the running app in a live browser when browser tools are available. |
-| `code-reviewer` | `claude-opus-5-5` | Independent correctness review of the others' work against the brief and acceptance criteria. Read-only; never edits code. |
-| `security-engineer` | `claude-opus-5-5` | Security-only review of the others' work. Read-only; reports findings with severity, never edits code. |
+| `team-leader` | `opus` | Entrypoint. Learns the project, plans, writes briefs, dispatches, reviews, decides. |
+| `backend-engineer` | `sonnet` | API, data model and migrations, auth, integrations, CI pipelines, backend tests. |
+| `frontend-engineer` | `sonnet` | Web app and shared web components. |
+| `mobile-engineer` | `sonnet` | Mobile app (React Native/Expo, Flutter, native). |
+| `product-designer` | `sonnet` | Brand, design system, handoff specs. |
+| `e2e-tester` | `sonnet` | Browser end-to-end tests against the real backend; can also explore the running app in a live browser when browser tools are available. |
+| `code-reviewer` | `opus` | Independent correctness review of the others' work against the brief and acceptance criteria. Read-only; never edits code. |
+| `security-engineer` | `opus` | Security-only review of the others' work. Read-only; reports findings with severity, never edits code. |
 
 ## How it works
 
@@ -29,8 +29,9 @@ you ──► team-leader (Opus) ──brief──► specialist (Sonnet)
 2. **Questions go up, never sideways.** Subagents can't talk to each other or to you, and can't spawn agents. A specialist with a doubt finishes what is clear and ends its report with `## Questions for the leader`, each with a recommended answer.
 3. **The leader decides, or asks you.** It answers from the backlog, ADRs and code, then resumes the specialist with `SendMessage`. If the leader is itself unsure about direction (scope, priorities, pricing, legal/tax, hard-to-reverse choices), it asks **you** with a recommendation.
 4. **Review before done.** The leader checks real diffs and test results against the acceptance criteria, not the agents' summaries. Non-trivial changes also go to `code-reviewer`, which reviews correctness with a fresh context and returns `block`, `fix before done` or `pass`.
-5. **Parallel only across apps.** The leader runs tasks in parallel only when different agents own different apps or docs (e.g. backend and design). It never runs two instances of the same agent, or two agents on the same app, at once: that work goes to one agent in sequence, so there are no conflicting edits to reconcile.
-6. **Security gate.** Changes that touch auth, tenant isolation, input, data, secrets, webhooks, uploads, integrations or dependencies go to `security-engineer` before they're done. It reviews security only (no style or performance), with read-only tools, and returns `block`, `fix before done` or `pass`; findings go back to the owning engineer and the fix is re-reviewed.
+5. **Guardrail hook.** A `PreToolUse` hook asks you to confirm any destructive database command (reset, drop, truncate, schema push, flush) unless it can tell the target is local: a local URL in the command, or a local `DATABASE_URL` in the environment or the project's `.env` files. It fires for the leader and every subagent, and never blocks ordinary commands.
+6. **Parallel only across apps.** The leader runs tasks in parallel only when different agents own different apps or docs (e.g. backend and design). It never runs two instances of the same agent, or two agents on the same app, at once: that work goes to one agent in sequence, so there are no conflicting edits to reconcile.
+7. **Security gate.** Changes that touch auth, tenant isolation, input, data, secrets, webhooks, uploads, integrations or dependencies go to `security-engineer` before they're done. It reviews security only (no style or performance), with read-only tools, and returns `block`, `fix before done` or `pass`; findings go back to the owning engineer and the fix is re-reviewed.
 
 ## Project handbook
 
@@ -80,9 +81,14 @@ Project instructions always override the agents' defaults.
 
 ## Customize
 
-- **Models**: change `model:` in each agent's frontmatter (`opus`, `sonnet`, `haiku` or a full model ID).
+- **Models**: agents use the `opus` and `sonnet` aliases, which follow the latest release. To pin a version (more predictable behaviour across model releases), set `model:` in the agent's frontmatter to a full model ID.
 - **Roles**: delete agents you don't need, or add project-specific ones in `.claude/agents/`; the leader treats them as team members.
+- **Guardrail hook**: edit the patterns in `hooks/guard-destructive-db.sh` and run `bash hooks/guard-destructive-db.test.sh`; remove `hooks/hooks.json` to turn it off.
 - **Restrict dispatch**: add a `tools:` list to `team-leader.md` with `Agent(agent-team:backend-engineer, ...)` plus the other tools it needs.
+
+## Testing the team
+
+`evals/` holds behaviour tests for `claude plugin eval`: the leader delegates instead of coding, asks instead of guessing on legal rules, the reviewers catch a seeded bug and a cross-tenant leak, and the handbook doesn't invent a product vision. See [`evals/README.md`](evals/README.md) for how to run them. Run them after changing an agent prompt or the skill.
 
 ## Layout
 
@@ -92,4 +98,8 @@ Project instructions always override the agents' defaults.
 settings.json                     default agent = team-leader
 agents/*.md                       the eight agents
 skills/project-handbook/SKILL.md  handbook structure, templates and procedure
+hooks/hooks.json                  PreToolUse guard for destructive database commands
+hooks/guard-destructive-db*.sh    the guard and its tests
+evals/                            behaviour tests (claude plugin eval)
+CHANGELOG.md                      what changed in each version
 ```

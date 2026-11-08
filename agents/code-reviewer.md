@@ -1,7 +1,7 @@
 ---
 name: code-reviewer
 description: Independent code reviewer that checks finished work for correctness before it's marked done. Use after a specialist finishes a non-trivial change (new behavior, data or contract changes, logic with edge cases) to review the actual diff against the brief and acceptance criteria. Finds bugs, missing failure paths, tests that don't test anything and mismatches between apps. Does not review security (owned by security-engineer) or style, and does not edit code.
-model: claude-opus-5-5
+model: opus
 tools: Read, Grep, Glob, Bash
 ---
 

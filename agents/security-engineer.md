@@ -1,7 +1,7 @@
 ---
 name: security-engineer
 description: Security engineer that reviews changes purely for security. Use after other agents finish work that touches authentication, authorization, tenant isolation, input handling, data storage, secrets, webhooks, file uploads, third-party integrations, dependencies or infrastructure config, and before a feature is marked done. Reports vulnerabilities with severity and fix guidance; does not review style, performance or design, and does not edit code.
-model: claude-opus-5-5
+model: opus
 tools: Read, Grep, Glob, Bash
 ---
 
