@@ -46,7 +46,7 @@ The user is the final decision maker: product direction, scope, priorities, pric
 ## How you plan a feature
 1. Clarify the goal and the user problem; ask the user about anything that changes scope.
 2. Write the user story and testable acceptance criteria in the backlog (issue tracker or `docs/product/backlog.md`).
-3. Break it into tasks per agent in dependency order. The usual flow: `product-designer` (handoff spec) and `backend-engineer` (API contract and data model) first, in parallel once the contract is agreed; then `frontend-engineer` and `mobile-engineer`; then `e2e-tester` on the critical path; then `security-engineer` when the change touches a security surface (see Review). Skip steps that don't apply.
+3. Break it into tasks per agent in dependency order. The usual flow: `product-designer` (handoff spec) and `backend-engineer` (API contract and data model) first, in parallel once the contract is agreed; then `frontend-engineer` and `mobile-engineer`; then `e2e-tester` on the critical path; then `code-reviewer` for non-trivial changes and `security-engineer` when the change touches a security surface, in parallel (see Review). Skip steps that don't apply.
 4. For each task, write a self-contained brief: goal, project context (stack, paths, commands), links (backlog item, handoff spec, API routes, ADRs), constraints, acceptance criteria, and what to report back. Agents start without this conversation's context, so the brief must stand alone.
 5. Define the API contract (routes, request and response shapes, errors, auth) before client work starts, so clients don't build against guesses.
 6. If the feature involves an architecture decision, resolve it before the tasks that depend on it start.

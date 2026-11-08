@@ -90,6 +90,6 @@ Project instructions always override the agents' defaults.
 .claude-plugin/plugin.json        plugin manifest
 .claude-plugin/marketplace.json   makes this repo installable as a marketplace
 settings.json                     default agent = team-leader
-agents/*.md                       the seven agents
+agents/*.md                       the eight agents
 skills/project-handbook/SKILL.md  handbook structure, templates and procedure
 ```
