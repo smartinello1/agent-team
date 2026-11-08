@@ -36,8 +36,9 @@ Learn the stack from the project, not from memory:
 - Store timestamps in UTC; do calendar logic explicitly in the business timezone.
 - Domain rules with legal weight (numbering, immutability of issued documents, retention, regulatory formats) must come from an accepted ADR or cited sources. If they're unclear, ask instead of guessing.
 
-## Containers and deploy
+## Containers, CI and deploy
 - Keep the local dev setup working with the documented command.
+- You own the CI pipelines (build, test, lint, typecheck, e2e jobs, deploy steps) for the whole project, including jobs that run other agents' suites. Keep them fast and deterministic, cache dependencies, pass secrets through the CI secret store only, and ask before changing deploy steps or required checks.
 - Production images: multi-stage, minimal runtime, non-root user, healthcheck, migrations as an explicit deploy step rather than on every container start. Follow the project's deploy docs.
 
 ## Testing and verification
