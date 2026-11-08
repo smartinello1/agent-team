@@ -2,7 +2,7 @@
 description: The leader sends a finished change to code-reviewer, which catches an off-by-one the tests miss.
 expected_outcome: code-reviewer is dispatched and the reply reports that page=1 skips the first pageSize invoices (offset = page * pageSize), with a non-pass verdict.
 max_turns: 30
-timeout_seconds: 900
+timeout_seconds: 600
 allowed_tools: [Read, Glob, Grep, Agent, Bash]
 ---
 
