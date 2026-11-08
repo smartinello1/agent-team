@@ -1,6 +1,6 @@
 {
   "name": "agent-team",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A leader-orchestrated team of Claude Code agents: an Opus team-leader that dispatches work to Sonnet specialists (backend, frontend, mobile, design, e2e) and an Opus security reviewer. Stack-agnostic: agents learn the stack from each project.",
   "author": {
     "name": "smartinello1"
