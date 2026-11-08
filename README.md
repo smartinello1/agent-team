@@ -40,14 +40,14 @@ The leader keeps a **handbook** so anyone can pick up the project from one page:
 docs/
   README.md              entry point: what the product is, current state, system map, where to find what
   decisions.md           append-only dated log: decision + why + links
-  product/vision.md      problem, users, value proposition, what it is not, roadmap summary
-  product/domain.md      glossary, business rules, lifecycles
+  product/domain.md      glossary, business rules, lifecycles (created with the first domain rule)
+  product/vision.md      optional: only when you give product direction (users, positioning, roadmap)
   architecture/overview.md   how the system works today
   architecture/NNNN-*.md     ADRs for cross-cutting, hard-to-reverse decisions
   design/                owned by product-designer
 ```
 
-Roadmap and backlog live in your issue tracker if you use one (otherwise `docs/product/roadmap.md` and `backlog.md`). Setup, deploy and agent rules stay where they are (app READMEs, deploy docs, `CLAUDE.md`); the handbook links to them. The living pages are updated in the PR that changes the behaviour; `decisions.md` is never rewritten.
+Roadmap and backlog live in your issue tracker if you use one (otherwise `docs/product/roadmap.md` and `backlog.md`). Setup, deploy and agent rules stay where they are (app READMEs, deploy docs, `CLAUDE.md`); the handbook links to them. Documents are created when there is something true to put in them, and the leader never invents product direction: on a technical project with little product input, the handbook is `README.md`, `decisions.md`, `architecture/` and, as rules appear, `domain.md`. The living pages are updated in the PR that changes the behaviour; `decisions.md` is never rewritten.
 
 The `project-handbook` skill holds the templates and the setup, update and audit procedure. The leader loads it when a project has no handbook yet; you can also run it directly with `/agent-team:project-handbook`. If your project already keeps these docs elsewhere, say so in `CLAUDE.md`.
 
