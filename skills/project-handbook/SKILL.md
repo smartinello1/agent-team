@@ -1,6 +1,6 @@
 ---
 name: project-handbook
-description: Set up, audit or update a project's handbook — the docs/ structure with one short entry point (docs/README.md) that links to an append-only decision log, an architecture overview, ADRs, product vision and domain docs. Use when a project has no docs/ yet, when docs are scattered or stale, when someone needs to pick up the project from one place, or after a change that makes the architecture or domain docs out of date.
+description: Set up, audit or update a project's handbook — the docs/ structure with one short entry point (docs/README.md) that links to an append-only decision log, an architecture overview, ADRs, domain docs and, when the user gives product direction, a product vision. Use when a project has no docs/ yet, when docs are scattered or stale, when someone needs to pick up the project from one place, or after a change that makes the architecture or domain docs out of date.
 ---
 
 # Project handbook
@@ -19,8 +19,11 @@ docs/
                          system map, "where to find what", first day, doc rules
   decisions.md           append-only dated log: decision + why + links
   product/
-    vision.md            problem, users, value proposition, what it is not, roadmap summary
-    domain.md            glossary, business rules, lifecycles
+    domain.md            glossary, business rules, lifecycles; created with the first
+                         domain concept or rule, not as an empty template
+    vision.md            optional: only when the user gives real product direction
+                         (users, positioning, roadmap); otherwise "What <Product> is"
+                         in README.md is the whole product statement
     backlog.md           only if the project doesn't use an issue tracker
   architecture/
     overview.md          how the system works today: apps, identity, tenancy, data,
@@ -38,6 +41,11 @@ Rules:
   rewritten: a reversed decision gets a new entry that supersedes the old one.
 - **Facts vs assumptions.** Market, regulatory, provider and pricing claims need a source;
   otherwise mark them as assumptions. Product sections the user hasn't decided stay `_TBD_`.
+- **Never invent product direction.** Users, value proposition, positioning, principles and
+  roadmap come only from the user or cited sources. If they're missing, keep "What <Product>
+  is" to what the code and the user show, and ask; don't write a `vision.md` to fill the gap.
+- **No empty files.** Create a document when there is something true to put in it. A file of
+  headings and `_TBD_` reads as if it were decided.
 - **Language.** Follow the project's convention (`CLAUDE.md`) for docs language.
 
 ## Procedure
@@ -49,7 +57,10 @@ Rules:
    propose the structure to the user before writing.
 3. Write the files from the templates below. Fill only what is known and sourced; seed
    `decisions.md` from decisions you can trace (PRs, issues, `CLAUDE.md`, user statements),
-   dated. Leave product choices `_TBD_` for the user.
+   dated. Always write `README.md`, `decisions.md` and `architecture/overview.md`. Write
+   `product/domain.md` only if the code or the user already show domain concepts or rules,
+   and `product/vision.md` only if the user has given product direction; ask the user whether
+   they want one rather than drafting it yourself.
 4. Add a "start here" link to `docs/README.md` in the root `README.md`, and a line in
    `CLAUDE.md` telling agents to start from it and to keep it current.
 5. Docs-only PR when the user asks for one; format with the project's formatter.
@@ -57,13 +68,17 @@ Rules:
 ### Keeping it current (after each piece of work)
 - New decision that matters beyond one task → entry in `decisions.md`.
 - Behaviour changed (identity, data model, integrations, environments, commands) →
-  update `architecture/overview.md`; new concept or rule → `product/domain.md`.
+  update `architecture/overview.md`; new concept or rule → `product/domain.md` (create it
+  if it doesn't exist yet).
 - Milestone reached or scope changed → "Current state" in `docs/README.md`.
+- The user gives product direction (target users, positioning, roadmap) beyond what fits in
+  "What <Product> is" → create or update `product/vision.md`.
 
 ### Auditing
 Check links resolve, "Current state" matches the code and tracker, `overview.md` matches the
 code (routes, auth, data model, environments), no duplicated instructions that drifted from
-their source, and open `_TBD_` sections that now have answers. Report findings; fix what is
+their source, open `_TBD_` sections that now have answers, and product content with no
+source in the user's words or the tracker (flag it as an assumption). Report findings; fix what is
 yours to fix.
 
 ## Templates
@@ -76,8 +91,10 @@ Start here. This page tells you what <Product> is, where it stands and where eve
 document lives.
 
 ## What <Product> is
-<2-4 sentences: who it is for, the problem, the core of the product, what is not core.>
-More in [`product/vision.md`](product/vision.md) and [`product/domain.md`](product/domain.md).
+<2-4 sentences from what the user and the code show: who it is for, the problem, the core of
+the product, what is not core. Mark anything the user hasn't confirmed as an assumption.>
+<Link only the files that exist:> More in [`product/domain.md`](product/domain.md) and
+[`product/vision.md`](product/vision.md).
 
 ## Current state
 - **Built:** <what works end to end today>
@@ -95,7 +112,7 @@ Details: [`architecture/overview.md`](architecture/overview.md).
 | Why something was decided, and when | [`decisions.md`](decisions.md) |
 | How the system works | [`architecture/overview.md`](architecture/overview.md) |
 | Big architecture decisions (ADRs) | [`architecture/`](architecture/) |
-| Product vision and domain rules | [`product/`](product/) |
+| Domain concepts and rules (and product vision, if written) | [`product/`](product/) |
 | Roadmap and backlog | <issue tracker milestones / product/backlog.md> |
 | Design system and handoffs | [`design/`](design/) |
 | Quick start, commands per app | <root README, app READMEs> |
@@ -159,7 +176,9 @@ are this way: [`../decisions.md`](../decisions.md).
 <links to issues>
 ```
 
-### docs/product/vision.md
+### docs/product/vision.md (optional)
+Only when the user has given product direction. Every section comes from the user or a cited
+source; leave out sections they haven't spoken to instead of filling them.
 ```markdown
 # Vision
 
