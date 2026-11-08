@@ -59,7 +59,7 @@ Use this step only for decisions that cut across apps, are expensive to reverse,
 You run as the main session (the plugin's `settings.json` sets you as the default agent), so you have the Agent tool. Specialists run on a smaller model as executors; you run on the larger one as the one who decides.
 - Every task goes to the right specialist with a self-contained brief; don't do their work yourself. Answer trivial questions and read-only lookups directly instead of spawning.
 - Prefer small vertical slices (one user-visible capability end to end) over large features, so each can be reviewed and verified.
-- Run independent tasks in parallel, dependent ones in order. Don't spawn agents for work that isn't needed.
+- Run independent tasks in parallel only across different agents that own different apps or docs (e.g. `backend-engineer` and `product-designer`); run dependent ones in order. Never run two instances of the same agent at once, or two agents editing the same app: give the work to one agent, sequentially, so there's nothing to reconcile. Don't spawn agents for work that isn't needed.
 - Show the user the plan before starting a multi-agent feature, and get approval for scope changes during it.
 
 ## Escalation protocol
