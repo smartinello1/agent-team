@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: code-reviewer-catches-bug
+tags: [review]
+plugins: ["../.."]
+context:
+  scaffold_script: fixture.sh
