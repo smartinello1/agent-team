@@ -2,6 +2,11 @@
 
 All notable changes to the agent-team plugin. Versions follow `version` in `.claude-plugin/plugin.json`; update the plugin with `/plugin marketplace update agent-team` to get a new one.
 
+## 1.5.1 — 2026-11-08
+- Leader: the security review is never skipped for size. Any change touching auth, input, data, secrets or integrations goes to `security-engineer`, and only the code review has a trivial-change exception. Found by the first eval run, where the leader skipped it for an unauthenticated `/health` route that had a crash bug.
+- Leader report names which agent did each part and which reviews ran or were skipped.
+- Evals: `leader-delegates-backend` now requires a security review and grades the report on substance. `leader-asks-on-legal-rules` checks that no implementation starts before the answers, instead of a `Read` of `CLAUDE.md`, which is already in context. The evals README recommends `--keep-temp`.
+
 ## 1.5.0 — 2026-11-08
 - **Guardrail hook**: a `PreToolUse` hook asks for confirmation before destructive database commands (Prisma/Drizzle reset or push, Rails/Django/Laravel/Sequelize/TypeORM resets, `dropdb`, raw `DROP`/`TRUNCATE` through a database client, Redis/Mongo flushes, linked Supabase resets) unless the target is clearly local. It covers the leader and every subagent. Tests: `bash hooks/guard-destructive-db.test.sh`.
 - **Evals**: `evals/` adds five behaviour tests for `claude plugin eval`: the leader delegates to `backend-engineer`, the leader asks about legal rules instead of guessing, `code-reviewer` catches an off-by-one, `security-engineer` catches cross-tenant access, and the handbook doesn't invent a vision.

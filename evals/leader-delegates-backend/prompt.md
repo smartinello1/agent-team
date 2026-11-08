@@ -1,7 +1,7 @@
 ---
-description: The leader delegates a small backend change to backend-engineer instead of writing the code itself, and the change lands.
-expected_outcome: backend-engineer is dispatched, GET /health exists and returns 200 {"status":"ok"}, tests pass.
-max_turns: 40
+description: The leader delegates a small backend change to backend-engineer instead of writing the code itself, sends it to security review because it adds an unauthenticated route, and the change lands.
+expected_outcome: backend-engineer and security-engineer are dispatched, GET /health exists and returns 200 {"status":"ok"}, tests pass.
+max_turns: 50
 timeout_seconds: 900
 allowed_tools: [Read, Glob, Grep, Agent, Edit, Write, Bash]
 ---
